@@ -17,3 +17,6 @@ var Priorities = []interface{}{
 	"Pipfile",
 	"pyproject.toml",
 }
+
+// The directory name in the layer where dependency will be downloaded and extracted.
+const SourceName = "python-source"

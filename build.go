@@ -106,12 +106,53 @@ func Build(dependencies DependencyManager, sbomGenerator SBOMGenerator, logger s
 		cpythonLayer.Launch, cpythonLayer.Build, cpythonLayer.Cache = launch, build, build
 
 		logger.Subprocess("Installing CPython %s", dependency.Version)
-		duration, err := clock.Measure(func() error {
-			return dependencies.Deliver(dependency, context.CNBPath, cpythonLayer.Path, context.Platform.Path)
-		})
-		if err != nil {
-			return packit.BuildResult{}, err
+
+		var duration time.Duration
+
+		// Install python from source when URI and Source match
+		if dependency.URI == dependency.Source {
+			sourcePath := filepath.Join(cpythonLayer.Path, SourceName)
+
+			// When installing from source set this to 1 to ensure source code is extracted correctly
+			dependency.StripComponents = 1
+
+			err = os.Mkdir(sourcePath, 0755)
+			if err != nil {
+				return packit.BuildResult{}, err
+			}
+
+			downloadDuration, err := clock.Measure(func() error {
+				return dependencies.Deliver(dependency, context.CNBPath, sourcePath, context.Platform.Path)
+			})
+			if err != nil {
+				return packit.BuildResult{}, err
+			}
+
+			installDuration, err := clock.Measure(func() error {
+				return InstallPython(context, dependency, cpythonLayer, logger)
+			})
+			if err != nil {
+				return packit.BuildResult{}, err
+			}
+
+			duration = downloadDuration + installDuration
+
+			err = os.RemoveAll(sourcePath)
+			if err != nil {
+				return packit.BuildResult{}, err
+			}
+		} else {
+			// Otherwise extract context from URI into layer
+			downloadDuration, err := clock.Measure(func() error {
+				return dependencies.Deliver(dependency, context.CNBPath, cpythonLayer.Path, context.Platform.Path)
+			})
+			if err != nil {
+				return packit.BuildResult{}, err
+			}
+
+			duration = downloadDuration
 		}
+
 		logger.Action("Completed in %s", duration.Round(time.Millisecond))
 		logger.Break()
 
