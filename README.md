@@ -25,6 +25,16 @@ The `BP_CPYTHON_VERSION` variable allows you to specify the version of CPython
 that is installed. (Available versions can be found in the
 [buildpack.toml](./buildpack.toml).)
 
+### `BP_CPYTHON_CONFIGURE_FLAGS`
+The `BP_CPYTHON_CONFIGURE_FLAGS` variable allows you to specify configure flags
+when python is installed from source. This is only applicable when using custom 
+stacks. Paketo stacks such as `io.buildpacks.stacks.bionic` install pre-built
+binaries. Default flags if not specified: --enable-optimizations --with-ensurepip
+
+### `BP_LOG_LEVEL`
+When using custom stacks that install python from source setting `BP_LOG_LEVEL=DEBUG`
+shows the commands and outputs run to build python.
+
 #### `pack build` flag
 ```shell
 pack build my-app --env BP_CPYTHON_VERSION=3.10.*
@@ -91,3 +101,7 @@ To run the unit and integration tests for this buildpack:
 ```
 $ ./scripts/unit.sh && ./scripts/integration.sh
 ```
+
+## Compatibility
+
+This buildpack is currently only supported on linux distributions.

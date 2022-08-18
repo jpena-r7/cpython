@@ -111,7 +111,7 @@ func Build(dependencies DependencyManager, sbomGenerator SBOMGenerator, logger s
 
 		// Install python from source when URI and Source match
 		if dependency.URI == dependency.Source {
-			sourcePath := filepath.Join(cpythonLayer.Path, SourceName)
+			sourcePath := filepath.Join(cpythonLayer.Path, "python-source")
 
 			// When installing from source set this to 1 to ensure source code is extracted correctly
 			dependency.StripComponents = 1
@@ -129,7 +129,7 @@ func Build(dependencies DependencyManager, sbomGenerator SBOMGenerator, logger s
 			}
 
 			installDuration, err := clock.Measure(func() error {
-				return InstallPython(context, dependency, cpythonLayer, logger)
+				return InstallPython(sourcePath, context, entry, dependency, cpythonLayer, logger)
 			})
 			if err != nil {
 				return packit.BuildResult{}, err

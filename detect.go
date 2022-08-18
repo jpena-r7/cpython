@@ -26,6 +26,14 @@ type BuildPlanMetadata struct {
 	// used by the consumer of the metadata to determine the priority of this
 	// version request.
 	VersionSource string `toml:"version-source"`
+
+	// ConfigureFlags denotes the configure flags to be requested in the requirements.
+	// This is used to run configure before make and make install.
+	ConfigureFlags string `toml:"configure-flags"`
+
+	// ConfigureFlagsSource denotes the source of the configure flags information. This may be
+	// used by the consumer of the metadata to determine the priority of the requested flags.
+	ConfigureFlagsSource string `toml:"configure-flags-source"`
 }
 
 // Detect will return a packit.DetectFunc that will be invoked during the
@@ -45,12 +53,20 @@ func Detect() packit.DetectFunc {
 		var requirements []packit.BuildPlanRequirement
 
 		if version, ok := os.LookupEnv("BP_CPYTHON_VERSION"); ok {
+			metadata := BuildPlanMetadata{
+				Version:       version,
+				VersionSource: "BP_CPYTHON_VERSION",
+			}
+
+			// Ignored for stacks that do not build python from source
+			if flags, ok := os.LookupEnv("BP_CPYTHON_CONFIGURE_FLAGS"); ok {
+				metadata.ConfigureFlags = flags
+				metadata.ConfigureFlagsSource = "BP_CPYTHON_CONFIGURE_FLAGS"
+			}
+
 			requirements = append(requirements, packit.BuildPlanRequirement{
-				Name: Cpython,
-				Metadata: BuildPlanMetadata{
-					Version:       version,
-					VersionSource: "BP_CPYTHON_VERSION",
-				},
+				Name:     Cpython,
+				Metadata: metadata,
 			})
 		}
 

@@ -4,81 +4,38 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strings"
 
-	"github.com/BurntSushi/toml"
 	"github.com/paketo-buildpacks/packit/v2"
 	"github.com/paketo-buildpacks/packit/v2/pexec"
 	"github.com/paketo-buildpacks/packit/v2/postal"
 	"github.com/paketo-buildpacks/packit/v2/scribe"
 )
 
-// postal.Dependency with extra field(s) specify to cpython
-type CpythonDependency struct {
-	postal.Dependency
+func InstallPython(sourcePath string, context packit.BuildContext, entry packit.BuildpackPlanEntry, dependency postal.Dependency, layer packit.Layer, logger scribe.Emitter) error {
+	flags, _ := entry.Metadata["configure-flags"].(string)
 
-	// Flags used for conigure before make and make install
-	ConfigureFlags []string `toml:"configure_flags"`
-}
-
-// parse buildpack.toml and return CpythonDependency for the given version
-func getCpythonDependency(path string, genericDependecy postal.Dependency) (CpythonDependency, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return CpythonDependency{}, fmt.Errorf("failed to parse buildpack.toml: %w", err)
+	if flags == "" {
+		flags = "--enable-optimizations --with-ensurepip"
+		logger.Debug.Subprocess("Using default configure flags: %v\n", flags)
 	}
 
-	var buildpack struct {
-		Metadata struct {
-			DefaultVersions map[string]string   `toml:"default-versions"`
-			Dependencies    []CpythonDependency `toml:"dependencies"`
-		} `toml:"metadata"`
-	}
-	_, err = toml.NewDecoder(file).Decode(&buildpack)
-	if err != nil {
-		return CpythonDependency{}, fmt.Errorf("failed to parse buildpack.toml: %w", err)
-	}
-
-	genericDependecyStacks := strings.Join(genericDependecy.Stacks, " ")
-
-	for _, dependency := range buildpack.Metadata.Dependencies {
-		dependecyStacks := strings.Join(dependency.Stacks, " ")
-		if dependency.Version == genericDependecy.Version && dependecyStacks == genericDependecyStacks {
-			return dependency, nil
-		}
-	}
-	return CpythonDependency{}, fmt.Errorf(
-		"failed to find dependency for version %s and stack %s",
-		genericDependecy.Version,
-		genericDependecy.Stacks,
-	)
-}
-
-func InstallPython(context packit.BuildContext, genericDependecy postal.Dependency, layer packit.Layer, logger scribe.Emitter) error {
-	dependency, err := getCpythonDependency(
-		filepath.Join(context.CNBPath, "buildpack.toml"), genericDependecy,
-	)
-	if err != nil {
-		return err
-	}
-
-	logger.Debug.Subprocess("(CpythonDependecy) dependency: %+v\n", dependency)
-
-	configureFlags := dependency.ConfigureFlags
+	whiteSpace := regexp.MustCompile(`\s+`)
+	configureFlags := whiteSpace.Split(flags, -1)
 	configureFlags = append(configureFlags, "--prefix="+layer.Path)
-	sourcePath := filepath.Join(layer.Path, SourceName)
 
 	commandEnv := []string{}
 
-	if os.Chdir(sourcePath) != nil {
+	if err := os.Chdir(sourcePath); err != nil {
 		return err
 	}
 
 	configure := pexec.NewExecutable(filepath.Join(sourcePath, "configure"))
 
-	logger.Subprocess("Running 'configure %s'", strings.Join(configureFlags, " "))
-	err = configure.Execute(pexec.Execution{
+	logger.Debug.Subprocess("Running 'configure %s'", strings.Join(configureFlags, " "))
+	err := configure.Execute(pexec.Execution{
 		Args:   configureFlags,
 		Env:    commandEnv,
 		Stdout: logger.Debug.ActionWriter,
@@ -91,7 +48,7 @@ func InstallPython(context packit.BuildContext, genericDependecy postal.Dependen
 	make := pexec.NewExecutable("make")
 
 	makeFlags := []string{"-j", fmt.Sprint(runtime.NumCPU()), `LDFLAGS="-Wl,--strip-all"`}
-	logger.Subprocess("Running 'make %s'", strings.Join(makeFlags, " "))
+	logger.Debug.Subprocess("Running 'make %s'", strings.Join(makeFlags, " "))
 	err = make.Execute(pexec.Execution{
 		Args:   makeFlags,
 		Env:    commandEnv,
@@ -103,7 +60,7 @@ func InstallPython(context packit.BuildContext, genericDependecy postal.Dependen
 	}
 
 	makeInstallFlags := []string{"altinstall"}
-	logger.Subprocess("Running 'make %s'", strings.Join(makeInstallFlags, " "))
+	logger.Debug.Subprocess("Running 'make %s'", strings.Join(makeInstallFlags, " "))
 	err = make.Execute(pexec.Execution{
 		Args:   makeInstallFlags,
 		Env:    commandEnv,
@@ -118,7 +75,7 @@ func InstallPython(context packit.BuildContext, genericDependecy postal.Dependen
 	major := versionList[0]
 	majorMinor := strings.Join(versionList[:len(versionList)-1], ".")
 
-	if os.Chdir(filepath.Join(layer.Path, "bin")) != nil {
+	if err = os.Chdir(filepath.Join(layer.Path, "bin")); err != nil {
 		return err
 	}
 
@@ -129,7 +86,7 @@ func InstallPython(context packit.BuildContext, genericDependecy postal.Dependen
 		}
 	}
 
-	if os.Chdir(context.WorkingDir) != nil {
+	if err = os.Chdir(context.WorkingDir); err != nil {
 		return err
 	}
 

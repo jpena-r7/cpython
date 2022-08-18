@@ -4,7 +4,6 @@ api = "0.7"
   id = "paketo-buildpacks/cpython"
   name = "Paketo CPython Buildpack"
   sbom-formats = ["application/vnd.cyclonedx+json", "application/spdx+json", "application/vnd.syft+json"]
-  version = "2.0.0" # Required for testing the stack locally. TODO: remove or updated this
 
   [[buildpack.licenses]]
     type = "Apache-2.0"
@@ -42,12 +41,6 @@ api = "0.7"
     source_sha256 = "33b4daaf831be19219659466d12645f87ecec6eb21d4d9f9711018a7b66cce46"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.7.12"
 
   [[metadata.dependencies]]
@@ -76,12 +69,6 @@ api = "0.7"
     source_sha256 = "e405417f50984bc5870c7e7a9f9aeb93e9d270f5ac67f667a0cd3a09439682b5"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.7.13/Python-3.7.13.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.7.13"
 
   [[metadata.dependencies]]
@@ -110,12 +97,6 @@ api = "0.7"
     source_sha256 = "316aa33f3b7707d041e73f246efedb297a70898c4b91f127f66dc8d80c596f1a"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.8.12"
 
   [[metadata.dependencies]]
@@ -144,12 +125,6 @@ api = "0.7"
     source_sha256 = "903b92d76354366b1d9c4434d0c81643345cef87c1600adfa36095d7b00eede4"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.8.13/Python-3.8.13.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.8.13"
 
   [[metadata.dependencies]]
@@ -191,12 +166,6 @@ api = "0.7"
     source_sha256 = "70e08462ebf265012bd2be88a63d2149d880c73e53f1712b7bbbe93750560ae8"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.9.12"
 
   [[metadata.dependencies]]
@@ -238,12 +207,6 @@ api = "0.7"
     source_sha256 = "829b0d26072a44689a6b0810f5b4a3933ee2a0b8a4bfc99d7c5893ffd4f97c44"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.9.13/Python-3.9.13.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.9.13"
 
   [[metadata.dependencies]]
@@ -285,12 +248,6 @@ api = "0.7"
     source_sha256 = "18f57182a2de3b0be76dfc39fdcfd28156bb6dd23e5f08696f7492e9e3d0bf2d"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.10.5"
 
   [[metadata.dependencies]]
@@ -331,12 +288,6 @@ api = "0.7"
     source_sha256 = "848cb06a5caa85da5c45bd7a9221bb821e33fc2bdcba088c127c58fad44e6343"
     stacks = ["*"]
     uri = "https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz"
-    configure_flags = [
-      "--enable-optimizations",
-      "--enable-loadable-sqlite-extensions",
-      "--enable-option-checking=fatal",
-      "--with-ensurepip",
-    ]
     version = "3.10.6"
 
   [[metadata.dependency-constraints]]

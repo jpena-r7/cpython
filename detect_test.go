@@ -69,6 +69,40 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 		})
 	})
 
+	context("when the BP_CPYTHON_CONFIGURE_FLAGS env var is set", func() {
+		it.Before(func() {
+			Expect(os.Setenv("BP_CPYTHON_VERSION", "some-version")).To(Succeed())
+			Expect(os.Setenv("BP_CPYTHON_CONFIGURE_FLAGS", "-flag1 -flag2")).To(Succeed())
+		})
+
+		it.After(func() {
+			Expect(os.Unsetenv("BP_CPYTHON_VERSION")).To(Succeed())
+			Expect(os.Unsetenv("BP_CPYTHON_CONFIGURE_FLAGS")).To(Succeed())
+		})
+
+		it("returns a plan that provides and requires that version of cpython with configure flags", func() {
+			result, err := detect(detectContext)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(result.Plan).To(Equal(packit.BuildPlan{
+				Provides: []packit.BuildPlanProvision{
+					{Name: cpython.Cpython},
+				},
+				Requires: []packit.BuildPlanRequirement{
+					{
+						Name: cpython.Cpython,
+						Metadata: cpython.BuildPlanMetadata{
+							Version:              "some-version",
+							VersionSource:        "BP_CPYTHON_VERSION",
+							ConfigureFlags:       "-flag1 -flag2",
+							ConfigureFlagsSource: "BP_CPYTHON_CONFIGURE_FLAGS",
+						},
+					},
+				},
+			}))
+		})
+	})
+
 	context("when there is a buildpack.yml", func() {
 		var workingDir string
 		it.Before(func() {

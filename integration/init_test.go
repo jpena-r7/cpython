@@ -3,7 +3,9 @@ package integration_test
 import (
 	"encoding/json"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -43,6 +45,32 @@ var settings struct {
 		BuildPlan string   `json:"build-plan"`
 		Builders  []string `json:"builders"`
 	}
+}
+
+type Builder struct {
+	Name            string
+	IsPaketoBuilder bool
+}
+
+func getDefaultPackBuilder() (Builder, error) {
+	// There is probably a better way to do this, but this works
+	cmd := exec.Command("pack", "config", "default-builder")
+	out, err := cmd.Output()
+
+	if err != nil {
+		return Builder{}, err
+	}
+
+	builder := Builder{}
+	builder.Name = strings.Split(string(out), "'")[1]
+
+	if strings.HasPrefix(builder.Name, "index.docker.io/paketobuildpacks/builder") {
+		builder.IsPaketoBuilder = true
+	} else {
+		builder.IsPaketoBuilder = false
+	}
+
+	return builder, err
 }
 
 func TestIntegration(t *testing.T) {
