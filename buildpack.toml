@@ -25,7 +25,7 @@ api = "0.7"
     sha256 = "9126994d0d80d4f301f5bdedc4faf06450d7df28b6c6f42f4d00442549fb0f11"
     source = "https://www.python.org/ftp/python/3.7.12/Python-3.7.12.tgz"
     source_sha256 = "33b4daaf831be19219659466d12645f87ecec6eb21d4d9f9711018a7b66cce46"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.7.12_linux_x64_bionic_9126994d.tgz"
     version = "3.7.12"
   
@@ -53,7 +53,7 @@ api = "0.7"
     sha256 = "8dc9323fb34e5d99d4e7597ded7f73c1d9cfa16ecca18fbb0348df92d8564342"
     source = "https://www.python.org/ftp/python/3.7.13/Python-3.7.13.tgz"
     source_sha256 = "e405417f50984bc5870c7e7a9f9aeb93e9d270f5ac67f667a0cd3a09439682b5"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.7.13_linux_x64_bionic_8dc9323f.tgz"
     version = "3.7.13"
   
@@ -81,7 +81,7 @@ api = "0.7"
     sha256 = "0ba8caf6faac53286732448a1c799073bcc57be5925faab157bbccddc87c3c2e"
     source = "https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tgz"
     source_sha256 = "316aa33f3b7707d041e73f246efedb297a70898c4b91f127f66dc8d80c596f1a"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.8.12_linux_x64_bionic_0ba8caf6.tgz"
     version = "3.8.12"
   
@@ -109,7 +109,7 @@ api = "0.7"
     sha256 = "78e0d6ace6994e5c0a27efa7220cc114502eccbf0e8f74dca9658d0ca4f0f7af"
     source = "https://www.python.org/ftp/python/3.8.13/Python-3.8.13.tgz"
     source_sha256 = "903b92d76354366b1d9c4434d0c81643345cef87c1600adfa36095d7b00eede4"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.8.13_linux_x64_bionic_78e0d6ac.tgz"
     version = "3.8.13"
 
@@ -137,7 +137,7 @@ api = "0.7"
     sha256 = "d09c1fa2b3e5b02784c562314b7301ee848fe2194af0f61796f9c57d8e53c9c5"
     source = "https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tgz"
     source_sha256 = "70e08462ebf265012bd2be88a63d2149d880c73e53f1712b7bbbe93750560ae8"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.9.12_linux_x64_bionic_d09c1fa2.tgz"
     version = "3.9.12"
 
@@ -178,7 +178,7 @@ api = "0.7"
     sha256 = "85a29adadf918b7df74d4dc7ec4e28273fbb2f4a35cd31d9b1a18b8aa4de4908"
     source = "https://www.python.org/ftp/python/3.9.13/Python-3.9.13.tgz"
     source_sha256 = "829b0d26072a44689a6b0810f5b4a3933ee2a0b8a4bfc99d7c5893ffd4f97c44"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.9.13_linux_x64_bionic_85a29ada.tgz"
     version = "3.9.13"
 
@@ -219,7 +219,7 @@ api = "0.7"
     sha256 = "e8027469448fc94c49140b3de122a2a5b8437c04ca47f72ee4d38e1e6d68a540"
     source = "https://www.python.org/ftp/python/3.10.5/Python-3.10.5.tgz"
     source_sha256 = "18f57182a2de3b0be76dfc39fdcfd28156bb6dd23e5f08696f7492e9e3d0bf2d"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.10.5_linux_x64_bionic_e8027469.tgz"
     version = "3.10.5"
 
@@ -260,7 +260,7 @@ api = "0.7"
     sha256 = "dbe8573a67909a5736a65a9246d1e5c27659575bba39419d1f8421c495abd202"
     source = "https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz"
     source_sha256 = "848cb06a5caa85da5c45bd7a9221bb821e33fc2bdcba088c127c58fad44e6343"
-    stacks = ["io.buildpacks.stacks.bionic"]
+    stacks = ["io.buildpacks.stacks.bionic", "org.cloudfoundry.stacks.cflinuxfs3"]
     uri = "https://deps.paketo.io/python/python_3.10.6_linux_x64_bionic_dbe8573a.tgz"
     version = "3.10.6"
 
